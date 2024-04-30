@@ -13,7 +13,7 @@ steps:
     args:
     - 'run'
     - 'deploy'
-    - 'my-api-service'  # Change to your Cloud Run service name
+    - 'adaptive-pipeline-model-persistence-service'  # Change to your Cloud Run service name
     - '--image'
     - 'gcr.io/$PROJECT_ID/adaptive-pipeline-model-persistence-image:$COMMIT_SHA'
     - '--region'

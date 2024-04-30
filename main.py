@@ -1,20 +1,16 @@
+import os
 from flask import Flask, request, jsonify
-import firebase_admin
-from firebase_admin import credentials, firestore
+from google.cloud import firestore
 
 app = Flask(__name__)
 
-# Initialize Firebase Admin
-cred = credentials.Certificate("path/to/your/firebase-key.json")
-firebase_admin.initialize_app(cred)
-
-db = firestore.client()
+db = firestore.Client()
 
 @app.route('/create', methods=['POST'])
 def create():
     try:
         data = request.json
-        ref = db.collection('your-collection').add(data)
+        ref = db.collection('adaptive-pipelines').add(data)
         return jsonify({"success": True, "id": ref[1].id}), 200
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 400
@@ -22,7 +18,7 @@ def create():
 @app.route('/read/<doc_id>', methods=['GET'])
 def read(doc_id):
     try:
-        doc = db.collection('your-collection').document(doc_id).get()
+        doc = db.collection('adaptive-pipelines').document(doc_id).get()
         if doc.exists:
             return jsonify(doc.to_dict()), 200
         else:
@@ -34,7 +30,7 @@ def read(doc_id):
 def update(doc_id):
     try:
         data = request.json
-        db.collection('your-collection').document(doc_id).update(data)
+        db.collection('daptive-pipelines').document(doc_id).update(data)
         return jsonify({"success": True}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 400
@@ -42,7 +38,7 @@ def update(doc_id):
 @app.route('/delete/<doc_id>', methods=['DELETE'])
 def delete(doc_id):
     try:
-        db.collection('your-collection').document(doc_id).delete()
+        db.collection('daptive-pipelines').document(doc_id).delete()
         return jsonify({"success": True}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 400

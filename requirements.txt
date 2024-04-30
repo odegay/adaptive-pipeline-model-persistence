@@ -1,2 +1,2 @@
 Flask
-firebase-admin
+google-cloud-firestore
