@@ -20,7 +20,7 @@ logger.setLevel(logging.INFO)  # Capture DEBUG, INFO, WARNING, ERROR, CRITICAL
 
 app = Flask(__name__)
 db = firestore.Client()
-logger.info(f"Firestore client created successfully db={db}")
+logger.info(f"Firestore client created successfully db={db._database_string}")
 
 @app.route("/")
 def service_working_confirmation():        
@@ -29,33 +29,44 @@ def service_working_confirmation():
 
 @app.route('/create', methods=['POST'])
 def create():
+    logger.info(f"Recieved create request with data: {request.json}")
     try:
         data = request.json
         ref = db.collection('adaptive-pipelines').add(data)
         logger.info(f"Document created with ID: {ref[1].id}")
         return jsonify({"success": True, "id": ref[1].id}), 200
     except Exception as e:
+        logger.info(f"Error: {str(e)}")
         logger.error(f"Error: {str(e)}")
         return jsonify({"success": False, "error": str(e)}), 400
 
 @app.route('/read/<doc_id>', methods=['GET'])
 def read(doc_id):
+    logger.info(f"Recieved read request for doc_id: {doc_id}")
     try:
         doc = db.collection('adaptive-pipelines').document(doc_id).get()
         if doc.exists:
+            logger.info(f"Document found: {doc.to_dict()}")
             return jsonify(doc.to_dict()), 200
         else:
+            logger.info(f"Document not found")
             return jsonify({"error": "Document not found"}), 404
     except Exception as e:
+        logger.error(f"Error: {str(e)}")
+        logger.info(f"Error: {str(e)}")
         return jsonify({"error": str(e)}), 400
 
 @app.route('/update/<doc_id>', methods=['PUT'])
 def update(doc_id):
+    logger.info(f"Recieved update request for doc_id: {doc_id} with data: {request.json}")
     try:
         data = request.json
         db.collection('adaptive-pipelines').document(doc_id).update(data)
+        logger.info(f"Document updated successfully")
         return jsonify({"success": True}), 200
     except Exception as e:
+        logger.info(f"Error: {str(e)}")
+        logger.error(f"Error: {str(e)}")
         return jsonify({"error": str(e)}), 400
 
 @app.route('/delete/<doc_id>', methods=['DELETE'])
