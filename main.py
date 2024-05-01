@@ -21,6 +21,10 @@ logger.setLevel(logging.DEBUG)  # Capture DEBUG, INFO, WARNING, ERROR, CRITICAL
 app = Flask(__name__)
 db = firestore.Client()
 
+@app.route("/")
+def service_working_confirmation():        
+    return f"Adaptive pipeline model persistence service is working"
+
 @app.route('/create', methods=['POST'])
 def create():
     try:
