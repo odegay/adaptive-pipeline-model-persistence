@@ -4,11 +4,11 @@ from flask import Flask, request, jsonify
 from google.cloud import firestore
 
 root_logger = logging.getLogger()
-root_logger.setLevel(logging.DEBUG)  # Capture DEBUG, INFO, WARNING, ERROR, CRITICAL
+root_logger.setLevel(logging.INFO)  # Capture DEBUG, INFO, WARNING, ERROR, CRITICAL
 if not root_logger.handlers:
     # Create console handler and set its log level to DEBUG
     ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
+    ch.setLevel(logging.INFO)
     # Create formatter and add it to the handler
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     ch.setFormatter(formatter)
@@ -16,13 +16,15 @@ if not root_logger.handlers:
     root_logger.addHandler(ch)
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)  # Capture DEBUG, INFO, WARNING, ERROR, CRITICAL
+logger.setLevel(logging.INFO)  # Capture DEBUG, INFO, WARNING, ERROR, CRITICAL
 
 app = Flask(__name__)
 db = firestore.Client()
+logger.info(f"Firestore client created successfully db={db}")
 
 @app.route("/")
 def service_working_confirmation():        
+    logger.info(f"Recieved debug heartbeat request")
     return f"Adaptive pipeline model persistence service is working"
 
 @app.route('/create', methods=['POST'])
@@ -30,7 +32,7 @@ def create():
     try:
         data = request.json
         ref = db.collection('adaptive-pipelines').add(data)
-        logger.debug(f"Document created with ID: {ref[1].id}")
+        logger.info(f"Document created with ID: {ref[1].id}")
         return jsonify({"success": True, "id": ref[1].id}), 200
     except Exception as e:
         logger.error(f"Error: {str(e)}")
