@@ -2,3 +2,4 @@ Flask
 gunicorn
 Werkzeug
 google-cloud-firestore
+adpipsvcfuncs==0.1.4
