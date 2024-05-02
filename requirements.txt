@@ -3,4 +3,5 @@ gunicorn
 Werkzeug
 google-cloud-firestore
 google-cloud-pubsub
+google-cloud-secret-manager
 adpipsvcfuncs==0.1.4
