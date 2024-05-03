@@ -36,10 +36,9 @@ def check_api_key(request):
     if token != api_key:
         logger.error(f"Error: Unauthorized access from IP: {IP_address}")
         return jsonify({"success": False, "error": "Not found"}), 404
-    return None
-    
+    return None    
 
-@app.route("/")
+@app.route("/hb")
 def service_working_confirmation():        
     logger.info(f"Recieved debug heartbeat request")
     return f"Adaptive pipeline model persistence service is working"
@@ -87,7 +86,7 @@ def update(doc_id):
         if response:
             return response
         data = request.json
-        db.collection('adaptive-pipelines').document(doc_id).update(data)
+        db.collection('adaptive-pipelines').document(doc_id).update(data)        
         logger.info(f"Document updated successfully")
         return jsonify({"success": True}), 200
     except Exception as e:
