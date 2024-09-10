@@ -4,4 +4,4 @@ Werkzeug
 google-cloud-firestore
 google-cloud-pubsub
 google-cloud-secret-manager
-adpipsvcfuncs==0.1.4
+adpipsvcfuncs==0.1.13

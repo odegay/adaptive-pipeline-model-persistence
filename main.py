@@ -93,7 +93,7 @@ def update(doc_id):
         logger.info(f"Error: {str(e)}")
         logger.error(f"Error: {str(e)}")
         return jsonify({"error": str(e)}), 400
-
+    
 @app.route('/delete/<doc_id>', methods=['DELETE'])
 def delete(doc_id):
     try:
